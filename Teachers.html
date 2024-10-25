@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Day Flip Book with Music and Image Fade-In</title>
+    <style>
+        body {
+            font-family: 'ital';
+            background-color: #f0f8ff;
+            margin: 0;
+            overflow: hidden;
+            font-weight: lighter;
+        }
+
+        .background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+
+        .book-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .book {
+            width: 710px;
+            height: 730px;
+            position: relative;
+            perspective: 1500px;
+            box-shadow: 0 0 200px rgba(219, 12, 184, 0.7), 0 0 50px rgba(51, 231, 228, 0.5), 0 0 70px rgba(27, 71, 17, 0.4);
+            border-radius: 10px;
+        }
+
+        input {
+            display: none;
+        }
+
+        .cover,
+        .back-cover {
+            background-image: url("https://img.freepik.com/free-photo/top-view-fresh-yellow-lemons-ripe-juicy-mellow-whole-lined-pink-yellow-background-fruits-citruses-summer_140725-16952.jpg?size=626&ext=jpg");
+            width: 100%;
+            height: 104%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center left;
+            position: absolute;
+            background-size: cover;
+            display: flex;
+        }
+
+        .cover {
+            z-index: 9;
+            transition: transform 1s;
+        }
+
+        .back-cover {
+            z-index: -1;
+        }
+
+        .page {
+            position: absolute;
+            background-color:coral;
+            width: 100%;
+            height: 103%;
+            border-radius: 10px;
+            margin-top: 10px;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition-duration: 1s;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .page .front,
+        .page .back {
+            position: absolute;
+            width: 100%;
+            backface-visibility: hidden;
+        }
+
+        .page .front {
+            z-index: 2;
+            transform: rotateY(0deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.4em;
+        }
+
+        .page .back {
+            background-image: url("https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149001650.jpg?size=626&ext=jpg"); /* Blank back */
+            z-index: 1;
+            height: 708px;
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5em;
+            color: #4173a5;
+            cursor: pointer; 
+        }
+
+        .page img {
+            width: 100%;
+            max-width: 580px;
+            height: auto;
+            max-height: 500px;
+            margin-top: 20px;
+            border-radius: 10px;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 3s ease-in-out; 
+        }
+
+        .restart-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 8px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            margin-top: 8px;
+        }
+
+        .restart-button:hover {
+            background-color: #8a4a36;
+        }
+
+        #checkbox-cover:checked~.book {
+            transform: translateX(200px);
+        }
+
+        #checkbox-cover:checked~.book .cover {
+            transition: transform 1s, z-index 0.5s 0.5s;
+            transform: rotateY(-180deg);
+            z-index: 1;
+        }
+
+        /* Flip effects for each page */
+        #checkbox-page1:checked~.book #page1 {
+            transform: rotateY(-180deg);
+            z-index: 8;
+        }
+
+        #checkbox-page2:checked~.book #page2 {
+            transform: rotateY(-180deg);
+            z-index: 7;
+        }
+
+        #checkbox-page3:checked~.book #page3 {
+            transform: rotateY(-180deg);
+            z-index: 6;
+        }
+
+        #checkbox-page4:checked~.book #page4 {
+            transform: rotateY(-180deg);
+            z-index: 5;
+        }
+
+        #checkbox-page5:checked~.book #page5 {
+            transform: rotateY(-180deg);
+            z-index: 4;
+        }
+
+        #checkbox-page6:checked~.book #page6 {
+            transform: rotateY(-180deg);
+            z-index: 3;
+        }
+
+        #checkbox-page7:checked~.book #page7 {
+            transform: rotateY(-180deg);
+            z-index: 2;
+        }
+
+        #checkbox-page8:checked~.book #page8 {
+            transform: rotateY(-180deg);
+            z-index: 1;
+        }
+
+        .page-content h2 {
+            margin-bottom: 5px; 
+        }
+
+        .page-content p {
+            margin-top: 0; 
+        }
+    </style>
+</head>
+<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap" rel="stylesheet">
+    
+    <video class="background-video" autoplay muted loop>
+        <source src="9667568-hd_1920_1080_25fps.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    
+    <audio id="background-music">
+        <source src="Happy Teachers Day _ New Teach-MobCup.vip.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    
+    <audio id="button-music">
+        <source src="1725608599069smtrlkv-voicemaker.in-speech (1).mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    
+    <div class="book-container">
+        
+        <input type="checkbox" id="checkbox-cover">
+        <input type="checkbox" id="checkbox-page1">
+        <input type="checkbox" id="checkbox-page2">
+        <input type="checkbox" id="checkbox-page3">
+        <input type="checkbox" id="checkbox-page4">
+        <input type="checkbox" id="checkbox-page5">
+        <input type="checkbox" id="checkbox-page6">
+        <input type="checkbox" id="checkbox-page7">
+        <input type="checkbox" id="checkbox-page8">
+
+        <div class="book">
+            
+            <div class="cover">
+                <label for="checkbox-cover" class="page-content">
+                    <h1>Happy Teacher's Day! To All Team Members❤️</h1>
+                </label>
+                <div class="back"></div>
+            </div>
+
+            
+            <div class="page" id="page1">
+                <div class="front page-content">
+                    <h2> <span class="teacher-name" onclick="showImageWithMusic('image1')">❤️Shekh Sir(Culture Associate)❤️</span><h2>
+                    <p class="appreciation">Thank you for inspiring us every day and making learning a wonderful journey.</p>
+                    <img id="image1" src="IMG-20240906-WA0007~3.jpg" alt="Dear Team Members">
+                    <button class="restart-button" onclick="restartBook()">😃</button>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">Happy Teachers Day To All Team Members</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page2">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image2')">❤️Swati Mam(Academic Associate)❤️</span></h2>
+                    <p class="appreciation">Your dedication to teaching is appreciated more than words can say. Thank you for everything!</p>
+                    <img id="image2" src="IMG-20240906-WA0004~2.jpg" alt="click">
+                    <label for="checkbox-page2">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Sheikh Sir😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page3">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image3')">❤️Pragati Mam(Academic Associate)❤️</span></h2>
+                    <p class="appreciation">Each lesson you teach is a gift. We are grateful for your wisdom and patience.</p>
+                    <img id="image3" src="IMG-20240906-WA0005.jpg" alt="Page 3">
+                    <label for="checkbox-page3">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Swati Mam😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page4">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image4')">❤️Bilqees Mam(Culture Associate)❤️</span></h2>
+                    <p class="appreciation">Your passion for teaching is truly inspiring. Thank you for making a difference in our lives.</p>
+                    <img id="image4" src="IMG-20240906-WA0008~3.jpg" alt="Page 4">
+                    <label for="checkbox-page4">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Pragati Mam😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page5">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image5')">❤️Poojarani Mam(Management Associate)❤️</span></h2>
+                    <p class="appreciation">Thank you for your guidance and support. Your efforts are truly appreciated.</p>
+                    <img id="image5" src="IMG-20240906-WA0013.jpg" alt="Page 5">
+                    <label for="checkbox-page5">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Bilqees Mam😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page6">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image6')">❤️Madhukar Sir(Academic Associate)❤️</span></h2>
+                    <p class="appreciation">Your enthusiasm for teaching is contagious. Thank you for making learning enjoyable.</p>
+                    <img id="image6" src="IMG-20240906-WA0015~2.jpg" alt="Page 6">
+                    <label for="checkbox-page6">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Poojarani Mam😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page7">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image7')">❤️Priyanka Mam(PML)❤️</span></h2>
+                    <p class="appreciation">Thank you for being a guiding light. Your dedication is appreciated more than you know.</p>
+                    <img id="image7" src="Screenshot_2024-09-06-07-48-29-01~3.jpg" alt="Page 7">
+                    <label for="checkbox-page7">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Madhukar Sir😊</h2>
+                </div>
+            </div>
+
+            
+            <div class="page" id="page8">
+                <div class="front page-content">
+                    <h2><span class="teacher-name" onclick="showImageWithMusic('image8')">🥹Click Here For Surprise🥹</span></h2>
+                    <p class="appreciation">Your dedication to teaching is inspiring. Thank you for making a difference!</p>
+                    <img id="image8" src="1000099962.jpg" alt="Priyanka Mam">
+                    <label for="checkbox-page8">🫶</label>
+                </div>
+                <div class="back">
+                    <h2 class="clickable-text" onclick="playButtonMusic()">😊Happy Teachers Day Priyanka Mam😊</h2>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function showImageWithMusic(imageId) {
+            var img = document.getElementById(imageId);
+            img.style.opacity = 1; 
+            var audio = document.getElementById('background-music');
+            audio.play(); 
+        }
+
+        function playButtonMusic() {
+            var buttonAudio = document.getElementById('button-music');
+            buttonAudio.play(); 
+        }
+
+        
+        function restartBook() {
+            document.getElementById('checkbox-cover').checked = false;
+            document.getElementById('checkbox-page1').checked = false;
+            document.getElementById('checkbox-page2').checked = false;
+            document.getElementById('checkbox-page3').checked = false;
+            document.getElementById('checkbox-page4').checked = false;
+            document.getElementById('checkbox-page5').checked = false;
+            document.getElementById('checkbox-page6').checked = false;
+            document.getElementById('checkbox-page7').checked = false;
+            document.getElementById('checkbox-page8').checked = false;
+        }
+
+        
+        window.onload = function() {
+            var audio = document.getElementById('background-music');
+            audio.loop = true;
+            audio.play();
+        };
+    </script>
+</body>
+
+</html>
